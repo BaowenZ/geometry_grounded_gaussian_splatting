@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,7 +26,6 @@
       --small-video-w: 260px;
       --small-video-gap: 8px;
 
-      /* NEW: unify page + compare background (important for RGBA PNG) */
       --page-bg: #ffffff;
       --compare-bg: var(--page-bg);
     }
@@ -46,13 +44,8 @@
       padding: 0 16px;
     }
 
-    .section {
-      padding: 28px 0;
-    }
-
-    .section.compact {
-      padding: 18px 0;
-    }
+    .section { padding: 28px 0; }
+    .section.compact { padding: 18px 0; }
 
     hr {
       border: 0;
@@ -67,6 +60,81 @@
       letter-spacing: -0.02em;
       line-height: 1.15;
       margin: 24px 0 10px;
+    }
+
+    /* ===== NEW: nicer top buttons (arXiv / PDF / Code) ===== */
+    .top-cta {
+      max-width: 980px;
+      margin: 0 auto 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .top-cta .cta-row {
+      display: inline-flex;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+    }
+
+    .cta-btn {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font-weight: 650;
+      font-size: 15px;
+      line-height: 1;
+      text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    }
+
+    .cta-btn:hover {
+      text-decoration: none;
+      border-color: rgba(26, 115, 232, 0.35);
+      box-shadow: 0 10px 24px rgba(26, 115, 232, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .cta-btn:active {
+      transform: translateY(0px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .cta-btn.primary {
+      background: linear-gradient(180deg, #1a73e8 0%, #0b57d0 100%);
+      color: #fff;
+      border-color: rgba(11, 87, 208, 0.35);
+      box-shadow: 0 12px 26px rgba(26, 115, 232, 0.22);
+    }
+
+    .cta-btn.primary:hover {
+      box-shadow: 0 16px 32px rgba(26, 115, 232, 0.28);
+      border-color: rgba(11, 87, 208, 0.55);
+    }
+
+    @media (max-width: 520px) {
+      .top-cta .cta-row {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        border-radius: 16px;
+      }
+      .cta-btn {
+        flex: 1 1 120px;
+      }
     }
 
     .authors-wrap {
@@ -92,24 +160,11 @@
       margin-top: 6px;
     }
 
-    a {
-      color: var(--link);
-      text-decoration: none;
-    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
+    a:visited { color: var(--link); }
 
-    a:hover {
-      color: var(--link-hover);
-      text-decoration: underline;
-    }
-
-    a:visited {
-      color: var(--link);
-    }
-
-    .teaser {
-      margin-top: 10px;
-      text-align: center;
-    }
+    .teaser { margin-top: 10px; text-align: center; }
 
     .teaser img {
       width: 100%;
@@ -128,11 +183,7 @@
       color: var(--muted);
     }
 
-    h1 {
-      font-size: 28px;
-      margin: 0 0 10px;
-      text-align: center;
-    }
+    h1 { font-size: 28px; margin: 0 0 10px; text-align: center; }
 
     .prose {
       max-width: 980px;
@@ -166,28 +217,11 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     }
 
-    .paper-meta {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
+    .paper-meta { font-size: 16px; color: var(--muted); margin-bottom: 6px; }
+    .paper-title { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+    .paper-links a { display: inline-block; margin-right: 12px; font-size: 18px; }
 
-    .paper-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 10px;
-    }
-
-    .paper-links a {
-      display: inline-block;
-      margin-right: 12px;
-      font-size: 18px;
-    }
-
-    .results {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .results { max-width: 1100px; margin: 0 auto; }
 
     .video-row {
       display: grid;
@@ -209,7 +243,6 @@
       gap: var(--small-video-gap);
       justify-content: center;
       align-items: start;
-
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       padding-bottom: 6px;
@@ -223,11 +256,7 @@
       display: block;
     }
 
-    figure {
-      margin: 0 auto 18px;
-      max-width: var(--maxw);
-      text-align: center;
-    }
+    figure { margin: 0 auto 18px; max-width: var(--maxw); text-align: center; }
 
     figure img {
       width: 100%;
@@ -238,11 +267,7 @@
       margin: 0 auto;
     }
 
-    figcaption {
-      margin-top: 10px;
-      font-size: 18px;
-      color: var(--muted);
-    }
+    figcaption { margin-top: 10px; font-size: 18px; color: var(--muted); }
 
     /* ===== draggable image compare ===== */
     .img-compare {
@@ -252,20 +277,13 @@
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border);
-
-      /* IMPORTANT: set opaque background so RGBA doesn't reveal the other image */
       background: var(--compare-bg);
-
       user-select: none;
       -webkit-user-select: none;
       touch-action: none;
     }
 
-    .img-compare__base {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .img-compare__base { width: 100%; height: auto; display: block; }
 
     .img-compare__overlay {
       position: absolute;
@@ -273,21 +291,14 @@
       clip-path: inset(0 0 0 var(--pos));
       -webkit-clip-path: inset(0 0 0 var(--pos));
       pointer-events: none;
-
-      /* IMPORTANT: block base image under transparent pixels */
       background: var(--compare-bg);
     }
 
-    .img-compare__overlay img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .img-compare__overlay img { width: 100%; height: auto; display: block; }
 
     .img-compare__handle {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: 0; bottom: 0;
       left: var(--pos);
       transform: translateX(-50%);
       width: 2px;
@@ -297,11 +308,9 @@
 
     .img-compare__knob {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border-radius: 999px;
       background: rgba(17, 24, 39, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.7);
@@ -310,12 +319,7 @@
       backdrop-filter: blur(4px);
     }
 
-    .img-compare__knob::before {
-      content: "↔";
-      color: #fff;
-      font-size: 18px;
-      line-height: 1;
-    }
+    .img-compare__knob::before { content: "↔"; color: #fff; font-size: 18px; line-height: 1; }
 
     .img-compare__label {
       position: absolute;
@@ -331,32 +335,20 @@
       pointer-events: none;
     }
 
-    .img-compare__label.left {
-      left: 12px;
-    }
+    .img-compare__label.left { left: 12px; }
+    .img-compare__label.right { right: 12px; }
 
-    .img-compare__label.right {
-      right: 12px;
-    }
-
-    /* ===== Compare + Reference in one row (stable caption layout) ===== */
+    /* ===== Compare + Reference in one row ===== */
     .compare-row {
       max-width: 1100px;
       margin: 0 auto 18px;
       display: grid;
-
-      /* Reference on the LEFT, compare on the RIGHT */
       grid-template-columns: 1fr 2fr;
-
       gap: 14px;
       align-items: start;
     }
 
-    .compare-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .compare-cell { display: flex; flex-direction: column; gap: 10px; }
 
     .compare-cap {
       text-align: center;
@@ -365,7 +357,6 @@
       margin: 0;
     }
 
-    /* NEW: image source note under the compare section */
     .compare-source {
       max-width: 1100px;
       margin: -6px auto 18px;
@@ -381,43 +372,16 @@
       background: var(--compare-bg);
     }
 
-    .ref-media img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 0;
-    }
+    .ref-media img { width: 100%; height: auto; display: block; border-radius: 0; }
 
-    /* Mobile */
     @media (max-width: 820px) {
-      .video-row {
-        grid-template-columns: 1fr;
-      }
-
-      .paper-item {
-        grid-template-columns: 1fr;
-      }
-
-      .paper-thumb {
-        max-width: 260px;
-        margin: 0 auto;
-      }
-
-      .author {
-        font-size: 18px;
-      }
-
-      .affiliation {
-        font-size: 16px;
-      }
-
-      .prose {
-        font-size: 17px;
-      }
-
-      .compare-row {
-        grid-template-columns: 1fr;
-      }
+      .video-row { grid-template-columns: 1fr; }
+      .paper-item { grid-template-columns: 1fr; }
+      .paper-thumb { max-width: 260px; margin: 0 auto; }
+      .author { font-size: 18px; }
+      .affiliation { font-size: 16px; }
+      .prose { font-size: 17px; }
+      .compare-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -425,6 +389,15 @@
 <body>
   <div class="container">
     <div class="title">Geometry-Grounded Gaussian Splatting</div>
+
+    <!-- NEW: arXiv / PDF / Code (better layout) -->
+    <div class="top-cta" aria-label="Quick links">
+      <div class="cta-row">
+        <a class="cta-btn primary" href="https://arxiv.org/abs/2601.17835" target="_blank" rel="noopener noreferrer">arXiv</a>
+        <a class="cta-btn" href="./resources/paper.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+        <a class="cta-btn" href="https://github.com/HKUST-SAIL/Geometry-Grounded-Gaussian-Splatting/tree/main" target="_blank" rel="noopener noreferrer">Code</a>
+      </div>
+    </div>
 
     <div class="authors-wrap">
       <span class="author">Baowen Zhang</span>
@@ -490,10 +463,8 @@
     <!-- RIGHT: draggable compare -->
     <div class="compare-cell">
       <div class="img-compare" data-start="50" aria-label="Drag to compare PGSR and Ours">
-        <!-- Base (LEFT): PGSR -->
         <img class="img-compare__base" src="./resources/pgsr_lion.png" alt="PGSR result (lion)" />
 
-        <!-- Overlay (RIGHT): Ours -->
         <div class="img-compare__overlay" aria-hidden="true">
           <img src="./resources/ours_lion.png" alt="" />
         </div>
@@ -510,7 +481,6 @@
     </div>
   </div>
 
-  <!-- NEW: Source note under the compare section -->
   <div class="compare-source">
     The images used for training are taken from the
     <a href="https://openheritage3d.org/project.php?id=1wv3-9775" target="_blank" rel="noopener noreferrer">
@@ -668,5 +638,4 @@
     })();
   </script>
 </body>
-
 </html>
