@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="StyleSheet" href="style.css" type="text/css" media="all" />
+  <title>Geometry-Grounded Gaussian Splatting</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Geometry-Grounded Gaussian Splatting" />
+  <meta property="og:type" content="website" />
+
+  <!-- GitHub buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <style>
+    :root {
+      --text: #111827;
+      --muted: #4b5563;
+      --border: #e5e7eb;
+      --link: #1a73e8;
+      --link-hover: #0b57d0;
+      --maxw: 1100px;
+
+      --small-video-w: 260px;
+      --small-video-gap: 8px;
+
+      /* NEW: unify page + compare background (important for RGBA PNG) */
+      --page-bg: #ffffff;
+      --compare-bg: var(--page-bg);
+    }
+
+    body {
+      color: var(--text);
+      background: var(--page-bg);
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section.compact {
+      padding: 18px 0;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    .title {
+      text-align: center;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 24px 0 10px;
+    }
+
+    .authors-wrap {
+      max-width: 980px;
+      margin: 8px auto 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 44px;
+      text-align: center;
+    }
+
+    .author {
+      font-size: 20px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .affiliation {
+      text-align: center;
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: var(--link);
+    }
+
+    .teaser {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .teaser img {
+      width: 100%;
+      max-width: 1000px;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .caption {
+      max-width: 980px;
+      margin: 14px auto 0;
+      text-align: center;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 10px;
+      text-align: center;
+    }
+
+    .prose {
+      max-width: 980px;
+      margin: 0 auto;
+      font-size: 18px;
+    }
+
+    .paper-card {
+      max-width: 980px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      background: #fff;
+    }
+
+    .paper-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .paper-thumb {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: block;
+      background: #fff;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .paper-meta {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .paper-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+
+    .paper-links a {
+      display: inline-block;
+      margin-right: 12px;
+      font-size: 18px;
+    }
+
+    .results {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .video-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .video-row video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #000;
+    }
+
+    .video-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, var(--small-video-w));
+      gap: var(--small-video-gap);
+      justify-content: center;
+      align-items: start;
+
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
+    }
+
+    .video-grid-4 video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #000;
+      display: block;
+    }
+
+    figure {
+      margin: 0 auto 18px;
+      max-width: var(--maxw);
+      text-align: center;
+    }
+
+    figure img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      margin-top: 10px;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    /* ===== draggable image compare ===== */
+    .img-compare {
+      --pos: 50%;
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+
+      /* IMPORTANT: set opaque background so RGBA doesn't reveal the other image */
+      background: var(--compare-bg);
+
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    .img-compare__base {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .img-compare__overlay {
+      position: absolute;
+      inset: 0;
+      clip-path: inset(0 0 0 var(--pos));
+      -webkit-clip-path: inset(0 0 0 var(--pos));
+      pointer-events: none;
+
+      /* IMPORTANT: block base image under transparent pixels */
+      background: var(--compare-bg);
+    }
+
+    .img-compare__overlay img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .img-compare__handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--pos);
+      transform: translateX(-50%);
+      width: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+    }
+
+    .img-compare__knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      display: grid;
+      place-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .img-compare__knob::before {
+      content: "↔";
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .img-compare__label {
+      position: absolute;
+      top: 12px;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .img-compare__label.left {
+      left: 12px;
+    }
+
+    .img-compare__label.right {
+      right: 12px;
+    }
+
+    /* ===== Compare + Reference in one row (stable caption layout) ===== */
+    .compare-row {
+      max-width: 1100px;
+      margin: 0 auto 18px;
+      display: grid;
+
+      /* Reference on the LEFT, compare on the RIGHT */
+      grid-template-columns: 1fr 2fr;
+
+      gap: 14px;
+      align-items: start;
+    }
+
+    .compare-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .compare-cap {
+      text-align: center;
+      font-size: 16px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* NEW: image source note under the compare section */
+    .compare-source {
+      max-width: 1100px;
+      margin: -6px auto 18px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .ref-media {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--compare-bg);
+    }
+
+    .ref-media img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 820px) {
+      .video-row {
+        grid-template-columns: 1fr;
+      }
+
+      .paper-item {
+        grid-template-columns: 1fr;
+      }
+
+      .paper-thumb {
+        max-width: 260px;
+        margin: 0 auto;
+      }
+
+      .author {
+        font-size: 18px;
+      }
+
+      .affiliation {
+        font-size: 16px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .compare-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="title">Geometry-Grounded Gaussian Splatting</div>
+
+    <div class="authors-wrap">
+      <span class="author">Baowen Zhang</span>
+      <span class="author">
+        <a href="https://jiang-cx.github.io/" target="_blank" rel="noopener noreferrer">Chenxing Jiang</a>
+      </span>
+      <span class="author">
+        <a href="https://hengli.me/" target="_blank" rel="noopener noreferrer">Heng Li</a>
+      </span>
+      <span class="author">
+        <a href="https://uav.hkust.edu.hk/group/" target="_blank" rel="noopener noreferrer">Shaojie Shen</a>
+      </span>
+      <span class="author">
+        <a href="https://pingtan.people.ust.hk/index.html" target="_blank" rel="noopener noreferrer">Ping Tan</a>
+      </span>
+    </div>
+
+    <div class="affiliation">
+      <a href="https://hkust.edu.hk/" target="_blank" rel="noopener noreferrer">
+        Hong Kong University of Science and Technology
+      </a>
+    </div>
+
+    <div class="section compact teaser">
+      <img src="./resources/teaser.jpg" alt="Teaser figure" />
+      <div class="caption">
+        We prove that Gaussian primitives are equivalent to stochastic solids, and leverage this equivalence to
+        reconstruct high-fidelity, multi-view-consistent shapes from multi-view images.
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="container section">
+    <h1>Abstract</h1>
+    <div class="prose">
+      <p>
+        Gaussian Splatting (GS) has demonstrated impressive quality and efficiency in novel view synthesis. However,
+        shape extraction from Gaussian primitives remains an open problem. Due to inadequate geometry parameterization
+        and approximation, existing shape reconstruction methods suffer from poor multi-view consistency and are
+        sensitive to floaters. In this paper, we present a rigorous theoretical derivation that establishes Gaussian
+        primitives as a specific type of stochastic solids. This theoretical framework provides a principled foundation
+        for Geometry-Grounded Gaussian Splatting by enabling the direct treatment of Gaussian primitives as explicit
+        geometric representations. Using the volumetric nature of stochastic solids, our method efficiently renders
+        high-quality depth maps for fine-grained geometry extraction. Experiments show that our method achieves the best
+        shape reconstruction results among all Gaussian Splatting-based methods on public datasets.
+      </p>
+    </div>
+  </div>
+
+  <hr />
+  <!-- ===== Reference (LEFT) + Compare (RIGHT) ===== -->
+  <div class="compare-row">
+    <!-- LEFT: Reference -->
+    <div class="compare-cell">
+      <div class="ref-media">
+        <img src="./resources/reference_lion.jpeg" alt="Reference lion (ground truth)" />
+      </div>
+      <p class="compare-cap">Reference Image.</p>
+    </div>
+
+    <!-- RIGHT: draggable compare -->
+    <div class="compare-cell">
+      <div class="img-compare" data-start="50" aria-label="Drag to compare PGSR and Ours">
+        <!-- Base (LEFT): PGSR -->
+        <img class="img-compare__base" src="./resources/pgsr_lion.png" alt="PGSR result (lion)" />
+
+        <!-- Overlay (RIGHT): Ours -->
+        <div class="img-compare__overlay" aria-hidden="true">
+          <img src="./resources/ours_lion.png" alt="" />
+        </div>
+
+        <div class="img-compare__label left">PGSR</div>
+        <div class="img-compare__label right">Ours</div>
+
+        <div class="img-compare__handle" aria-hidden="true">
+          <div class="img-compare__knob"></div>
+        </div>
+      </div>
+
+      <p class="compare-cap">PGSR (left) vs Ours (right).</p>
+    </div>
+  </div>
+
+  <!-- NEW: Source note under the compare section -->
+  <div class="compare-source">
+    The images used for training are taken from the
+    <a href="https://openheritage3d.org/project.php?id=1wv3-9775" target="_blank" rel="noopener noreferrer">
+      “Komainu / Kobe / Ikuta-jinja”
+    </a>
+    dataset provided by
+    <a href="https://openheritage3d.org" target="_blank" rel="noopener noreferrer">
+      Open Heritage 3D
+    </a>.
+  </div>
+
+  <hr />
+
+  <div class="container section">
+    <h1 id="paper">Paper and Code</h1>
+
+    <div class="paper-card">
+      <div class="paper-item">
+        <a href="./resources/paper.pdf" target="_blank" rel="noopener noreferrer">
+          <img class="paper-thumb" src="./resources/page1.png" alt="Paper preview (page 1)" />
+        </a>
+
+        <div>
+          <div class="paper-meta">B. Zhang, C. Jiang, H. Li, S. Shen, P. Tan</div>
+          <div class="paper-title">Geometry-Grounded Gaussian Splatting</div>
+          <div class="paper-meta">arXiv, 2026.</div>
+
+          <div class="paper-links">
+            <a href="https://arxiv.org/abs/2601.17835" target="_blank" rel="noopener noreferrer">[Paper]</a>
+            <a href="https://github.com/HKUST-SAIL/Geometry-Grounded-Gaussian-Splatting/tree/main" target="_blank" rel="noopener noreferrer">[Code]</a>
+            <a href="resources/bibtex.txt" target="_blank" rel="noopener noreferrer">[BibTeX]</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="container section">
+    <h1 id="results">Results</h1>
+
+    <div class="results">
+      <figure style="max-width: 1100px; margin: 0 auto 18px;">
+        <div class="video-row">
+          <video controls muted playsinline>
+            <source src="./resources/reprojection_truck.mp4" type="video/mp4" />
+          </video>
+
+          <video controls muted playsinline>
+            <source src="./resources/reprojection_caterpillar.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption>
+          We visualize the cycle reprojection error. Our method achieves stronger multi-view consistency.
+        </figcaption>
+      </figure>
+
+      <figure style="max-width: 1100px; margin: 0 auto 18px;">
+        <div class="video-grid-4">
+          <video controls muted playsinline preload="metadata">
+            <source src="./resources/scan24.mp4" type="video/mp4" />
+          </video>
+
+          <video controls muted playsinline preload="metadata">
+            <source src="./resources/scan65.mp4" type="video/mp4" />
+          </video>
+
+          <video controls muted playsinline preload="metadata">
+            <source src="./resources/scan106.mp4" type="video/mp4" />
+          </video>
+
+          <video controls muted playsinline preload="metadata">
+            <source src="./resources/scan122.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption>
+          Results on the DTU dataset.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="container section compact">
+    <figure>
+      <img src="./resources/depth_comparison.jpg" alt="DTU comparison" />
+      <figcaption>
+        Depth map visualization by converting depth maps into a 3D point cloud.
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="./resources/comparison.jpg" alt="Novel view synthesis comparison" />
+      <figcaption>
+        Comparison of our method with previous Gaussian Splatting-based methods on the Tanks and Temples dataset.
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="./resources/dtu.jpg" alt="DTU reconstructions" />
+      <figcaption>
+        Shape reconstructions on the DTU dataset.
+      </figcaption>
+    </figure>
+  </div>
+
+  <hr />
+
+  <div class="container section">
+    <h1>Acknowledgements</h1>
+    <div class="prose" style="text-align:center;">
+      The website is modified from this <a href="https://yqdch.github.io/DHSP3D/" target="_blank"
+        rel="noopener noreferrer">template</a>.
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function setPos(el, x01) {
+        const clamped = Math.min(0.999, Math.max(0.001, x01));
+        el.style.setProperty('--pos', (clamped * 100).toFixed(2) + '%');
+      }
+
+      function bindCompare(el) {
+        const start = parseFloat(el.dataset.start || '50');
+        setPos(el, start / 100);
+
+        let dragging = false;
+
+        function updateFromEvent(e) {
+          const rect = el.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;
+          setPos(el, x);
+        }
+
+        el.addEventListener('pointerdown', (e) => {
+          dragging = true;
+          if (el.setPointerCapture) el.setPointerCapture(e.pointerId);
+          updateFromEvent(e);
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          updateFromEvent(e);
+        });
+
+        window.addEventListener('pointerup', () => {
+          dragging = false;
+        });
+
+        el.addEventListener('click', (e) => updateFromEvent(e));
+      }
+
+      document.querySelectorAll('.img-compare').forEach(bindCompare);
+    })();
+  </script>
+</body>
+
+</html>

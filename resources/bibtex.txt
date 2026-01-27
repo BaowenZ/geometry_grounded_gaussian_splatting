@@ -1,0 +1,6 @@
+@article{Zhang2026GeometryGrounded,
+        author  =   {Baowen Zhang and Chenxing Jiang and Heng Li and Shaojie Shen and Ping Tan},
+        title     = {Geometry-Grounded Gaussian Splatting},
+        journal =   {arXiv preprint arXiv:2601.17835},
+        year    =   {2026},
+}
